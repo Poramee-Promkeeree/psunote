@@ -119,6 +119,41 @@ def tags_view(tag_name):
         notes=notes,
     )
 
+@app.route("/tags/management")
+def tags_management():
+    db = models.db
+    tags = db.session.execute(
+        db.select(models.Tag)
+    ).scalars()
+
+    return flask.render_template(
+        "tags-management.html",
+        tags=tags,
+    )
+
+@app.route("/tags/<tag_name>/update", methods=["GET","POST"])
+def tags_update(tag_name):
+    db = models.db
+    form = forms.TagForm()
+    tag = db.session.execute(
+        db.select(models.Tag).where(models.Tag.name == tag_name)
+    ).scalars().first()
+
+    if tag :
+        if form.validate_on_submit():
+            tag.name = form.name.data
+            db.session.commit()
+            return flask.redirect(flask.url_for("index"))
+        
+        form.name.data = tag.name
+    
+    return flask.render_template(
+        "tags-edit.html",
+        tag=tag,
+        form=form,
+        tag_name=tag_name,
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
