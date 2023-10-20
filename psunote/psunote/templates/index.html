@@ -15,6 +15,7 @@
         </div>
         <div class="col" style="display: flex; justify-content: flex-end;">
           <a class="btn btn-success" href="{{ url_for('notes_update', note_id=note.id) }}">Edit</a>
+          <a class="btn btn-danger" style="margin-left: 8px;" href="{{ url_for('notes_delete', note_id=note.id) }}">Delete</a>
         </div>
       </div>
     </div>

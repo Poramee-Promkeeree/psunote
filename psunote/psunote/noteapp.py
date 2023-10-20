@@ -92,6 +92,14 @@ def notes_update(note_id):
         form=form,
     )
 
+@app.route("/notes/<int:note_id>/delete", methods=["GET", "POST"])
+def notes_delete(note_id):
+    db = models.db
+    note = db.session.query(models.Note).get(note_id)
+    db.session.delete(note)
+    db.session.commit()
+
+    return flask.redirect(flask.url_for("index"))
 
 @app.route("/tags/<tag_name>")
 def tags_view(tag_name):
